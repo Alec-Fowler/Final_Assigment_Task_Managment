@@ -13,8 +13,8 @@ public class Task extends Entry{
         In_Progress,
         Completed
     }
-    public Task(String name, String description, LocalDate date, Priority priority, Status status){
-        super(name, description, date);
+    public Task(int id, String name, String description, String date, Priority priority, Status status){
+        super( id, name, description, date);
         this.priority = priority;
         this.status = status;
     }
