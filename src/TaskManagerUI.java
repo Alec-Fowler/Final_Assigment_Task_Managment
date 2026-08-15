@@ -11,6 +11,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,7 +21,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 // Main Class
-public static class TaskManagerUI {
+public class TaskManagerUI {
 
     // Constants
     final static int MAIN_WINDOW_WIDTH = 800;
@@ -186,7 +187,8 @@ public static class TaskManagerUI {
             int selectedRow = mainTable.getSelectedRow();
             if (selectedRow != -1) {
                 int modelRow = mainTable.convertRowIndexToModel(selectedRow);
-                System.out.printf("Selected row: %d\n", modelRow);
+                // Debug message to ensure delete worked properly
+                //System.out.printf("Selected row: %d\n", modelRow);
                 taskList.remove(modelRow);
                   for (int i = 0; i < taskList.size(); i++){
                       taskList.get(i).setID(i);
@@ -216,6 +218,7 @@ public static class TaskManagerUI {
 
 
         // Sets up a sorter so you can sort things in the menu without much thought
+        // https://docs.oracle.com/en/java/javase/26/docs/api/java.desktop/javax/swing/table/TableRowSorter.html
         mainTable.setAutoCreateRowSorter(true);
 
         // I don't want you reordering my table, so I disabled it
@@ -305,14 +308,17 @@ public static class TaskManagerUI {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         JTextArea description = new JTextArea(20, 5);
+
         // Makes it scrollable and text wrap
         description.setLineWrap(true);
         JScrollPane scrollPane = new JScrollPane(description);
         inputPanel.add(scrollPane, gridBagConstraints);
+
         // IO buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton submitButton = new JButton("Add");
         JButton cancelButton = new JButton("Cancel");
+
         // Add button (Submit)
         submitButton.addActionListener(_ -> {
             Task task = new Task(taskList.size());
@@ -364,6 +370,7 @@ public static class TaskManagerUI {
         gridBagConstraints.gridy = 0;
         JTextField name = new JTextField(10);
         inputPanel.add(name, gridBagConstraints);
+
         // Priority
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -373,6 +380,7 @@ public static class TaskManagerUI {
         gridBagConstraints.gridy = 1;
         JComboBox<Task.Priority> priority = new JComboBox<>(Task.Priority.values());
         inputPanel.add(priority, gridBagConstraints);
+
         // Status
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -382,6 +390,7 @@ public static class TaskManagerUI {
         gridBagConstraints.gridy = 2;
         JComboBox<Task.Status> status = new JComboBox<>(Task.Status.values());
         inputPanel.add(status, gridBagConstraints);
+
         // Date
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -391,6 +400,7 @@ public static class TaskManagerUI {
         gridBagConstraints.gridy = 3;
         JTextField date = new JTextField(10);
         inputPanel.add(date, gridBagConstraints);
+
         // Description
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -403,6 +413,7 @@ public static class TaskManagerUI {
         description.setLineWrap(true);
         JScrollPane scrollPane = new JScrollPane(description);
         inputPanel.add(scrollPane, gridBagConstraints);
+
         // IO buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton submitButton = new JButton("Edit");
@@ -428,7 +439,7 @@ public static class TaskManagerUI {
                 editFrame.dispose();
             } catch (Exception error) {
 
-                JOptionPane.showMessageDialog(editFrame, "Error: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                throw new RuntimeException(error);
             }
         });
 
@@ -629,7 +640,11 @@ public static class TaskManagerUI {
 }
 
 // Main Call
-void main() {
+
+public static void main(String[] args) {
     TaskManagerUI.uiStartup();
 }
+
+
+
 
