@@ -5,7 +5,7 @@
  Description: My Advanced Task Management app with a table and multiple windows
 */
 // Learned a lot from In-class-5 in how the UI is done and applied it in a more organized way in this assignment
-// https://github.com/Alec-Fowler/Inclass5/blob/master/src/TaskManagerUI.java
+// https://github.com/Alec-Fowler/Inclass5
 
 // Imports
 import javax.swing.*;
